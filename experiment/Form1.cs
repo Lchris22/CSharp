@@ -14,6 +14,7 @@ namespace experiment
 {
     public partial class Form1 : Form
     {
+        
         public static bool autosave = false;
         public static System.String actFile;
         public static System.String actFileName;
@@ -21,7 +22,9 @@ namespace experiment
         {
             InitializeComponent();
             refresh_list();
-            
+            deleteButton.Hide();
+            richTextBox1.Hide();
+
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -57,17 +60,25 @@ namespace experiment
         }
         private void listBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            Console.WriteLine("listbox select Index Changed");
-            //actFile = listBox1.Items[listBox1.SelectedIndex].ToString();
-            actFile = "c:\\Test\\" + listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
-            actFileName = listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
-            open_file();
+            
+            if (listBox1.SelectedIndex >= 0)
+            {
+                actFile = "c:\\Test\\" + listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
+                actFileName = listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
+                open_file();
+                deleteButton.Show();
+                richTextBox1.Show();
+            }
+            else
+            {
+                // No item selected, handle that or return
+            }
         }
         private void listBox1_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("listbox_click");
-            actFile = "c:\\Test\\" + listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
-            actFileName = listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
+            //Console.WriteLine("listbox_click");
+            //actFile = "c:\\Test\\" + listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
+            //actFileName = listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
         }
         private void groupBox1_Enter(object sender, EventArgs e)
         {
@@ -109,8 +120,12 @@ namespace experiment
                 i++;
             }
         }
-        public void open_file()
+        
+        public  void open_file()
         {
+
+            
+            
             autosave = false;
             Console.WriteLine("open_click");
             //string path = "c:\\Test\\" +actFile+".txt";
@@ -120,20 +135,36 @@ namespace experiment
                 richTextBox1.Text = (tr.ReadToEnd());
             }
             Console.WriteLine("open_click_end");
+            fileName.Text = actFileName;
             autosave = true;
         }
+        public void popup_form2()
+        {
+            Form2 frm = new Form2();
+            frm.ShowDialog();
+        }
 
-        
 
         private void newButton_Click(object sender, EventArgs e)
-        {
+        { 
+            popup_form2();
+            var fileStream = File.Create(actFile);
+            fileStream.Close();
+            open_file();
+            refresh_list();
+            richTextBox1.Show();
 
         }
-        public void new_note()
+
+        private void deleteButton_Click(object sender, EventArgs e)
         {
-            
-            actFile = "c:\\Test\\Untitled.txt";
-            TextWriter writer = File.CreateText(actFile);
+            File.Delete(actFile);
+            actFile = null;
+            actFileName = null;
+            refresh_list();
+            deleteButton.Hide();
+            richTextBox1.Hide();
+            fileName.Text = null;
         }
     }
 }
