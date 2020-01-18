@@ -148,8 +148,7 @@ namespace experiment
         private void newButton_Click(object sender, EventArgs e)
         { 
             popup_form2();
-            var fileStream = File.Create(actFile);
-            fileStream.Close();
+            
             open_file();
             refresh_list();
             richTextBox1.Show();

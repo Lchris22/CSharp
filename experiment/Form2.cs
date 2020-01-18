@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
 
 namespace experiment
 {
@@ -45,7 +46,8 @@ namespace experiment
             
             Form1.actFile= "c:\\Test\\" + textBox1.Text + ".txt";
             Form1.actFileName= textBox1.Text + ".txt";
-            
+            var fileStream = File.Create(Form1.actFile);
+            fileStream.Close();
             this.Close();
 
 
