@@ -14,7 +14,7 @@ namespace experiment
 {
     public partial class Form1 : Form
     {
-        
+        public static string path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)+"\\ProNotes";
         public static bool autosave = false;
         public static System.String actFile;
         public static System.String actFileName;
@@ -24,6 +24,13 @@ namespace experiment
             refresh_list();
             deleteButton.Hide();
             richTextBox1.Hide();
+            Console.WriteLine("GetFolderPath: {0}",path);
+            if (Directory.Exists(path))
+            {
+                Console.WriteLine("That path exists already.");
+                return;
+            }
+            DirectoryInfo di = Directory.CreateDirectory(path);
 
         }
         private void Form1_Load(object sender, EventArgs e)
@@ -63,7 +70,7 @@ namespace experiment
             
             if (listBox1.SelectedIndex >= 0)
             {
-                actFile = "c:\\Test\\" + listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
+                actFile = path+"\\" + listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
                 actFileName = listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
                 open_file();
                 deleteButton.Show();
@@ -77,7 +84,7 @@ namespace experiment
         private void listBox1_Click(object sender, EventArgs e)
         {
             //Console.WriteLine("listbox_click");
-            //actFile = "c:\\Test\\" + listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
+            //actFile = path+"\\" + listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
             //actFileName = listBox1.Items[listBox1.SelectedIndex].ToString() + ".txt";
         }
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -91,7 +98,7 @@ namespace experiment
             Console.Write(lines[0]);
 
             //to get original file name
-            DirectoryInfo d = new DirectoryInfo(@"C:\Test");
+            DirectoryInfo d = new DirectoryInfo(path + "\\");
             FileInfo[] infos = d.GetFiles();
             foreach (FileInfo f in infos)
             {
@@ -101,7 +108,7 @@ namespace experiment
 
             }
             actFileName = lines[0];
-            actFile= "c:\\Test\\" + actFileName+ ".txt";
+            actFile= path + "\\" + actFileName+ ".txt";
 
         }
         public  void refresh_list()
@@ -110,7 +117,7 @@ namespace experiment
             string[] fileList;
             fileList = new string[20];
             ListViewItem list1 = new ListViewItem();
-            DirectoryInfo d = new DirectoryInfo(@"c:\\Test");//Assuming Test is your Folder
+            DirectoryInfo d = new DirectoryInfo(path);//Assuming Test is your Folder
             FileInfo[] Files = d.GetFiles("*.txt"); //Getting Text files
             foreach (FileInfo file in Files)
             {
@@ -148,7 +155,6 @@ namespace experiment
         private void newButton_Click(object sender, EventArgs e)
         { 
             popup_form2();
-            
             open_file();
             refresh_list();
             richTextBox1.Show();

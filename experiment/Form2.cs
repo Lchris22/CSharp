@@ -44,7 +44,7 @@ namespace experiment
         private void createButton_Click(object sender, EventArgs e)
         {
             
-            Form1.actFile= "c:\\Test\\" + textBox1.Text + ".txt";
+            Form1.actFile= Form1.path + "\\" + textBox1.Text + ".txt";
             Form1.actFileName= textBox1.Text + ".txt";
             var fileStream = File.Create(Form1.actFile);
             fileStream.Close();
